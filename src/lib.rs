@@ -299,10 +299,10 @@ impl RenderElement<Gles2Renderer, Gles2Frame, Gles2Error, Gles2Texture> for Egui
         &self,
         _for_values: Option<SpaceOutputTuple<'_, '_>>,
     ) -> Vec<Rectangle<i32, Logical>> {
-        if self.ctx.output().needs_repaint {
+        if self.ctx.input().wants_repaint() || self.ctx.output().needs_repaint {
             vec![Rectangle::from_loc_and_size((0, 0), self.geometry().size)]
         } else {
-            vec![Rectangle::from_loc_and_size((0, 0), (0, 0))]
+            vec![]
         }
     }
 
