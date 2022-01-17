@@ -66,7 +66,7 @@ pub struct EguiState {
 pub struct EguiFrame {
     state_id: usize,
     ctx: CtxRef,
-    _output: Output,
+    output: Output,
     mesh: Vec<ClippedMesh>,
     scale: f64,
     area: Rectangle<i32, Physical>,
@@ -229,11 +229,11 @@ impl EguiState {
             dropped_files: Vec::with_capacity(0),
         };
 
-        let (_output, shapes) = self.ctx.run(input, ui);
+        let (output, shapes) = self.ctx.run(input, ui);
         EguiFrame {
             state_id: self.id,
             ctx: self.ctx.clone(),
-            _output,
+            output,
             mesh: self.ctx.tessellate(shapes),
             scale,
             area,
@@ -299,7 +299,7 @@ impl RenderElement<Gles2Renderer, Gles2Frame, Gles2Error, Gles2Texture> for Egui
         &self,
         _for_values: Option<SpaceOutputTuple<'_, '_>>,
     ) -> Vec<Rectangle<i32, Logical>> {
-        if self.ctx.input().wants_repaint() || self.ctx.output().needs_repaint {
+        if self.output.needs_repaint {
             vec![Rectangle::from_loc_and_size((0, 0), self.geometry().size)]
         } else {
             vec![]
